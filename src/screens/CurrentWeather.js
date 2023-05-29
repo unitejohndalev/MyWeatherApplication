@@ -2,8 +2,9 @@ import React from "react";
 import { View, Text, SafeAreaView, StyleSheet, StatusBar } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import RowText from "../components/RowText";
+import { weatherType } from "../utilities/weatherType";
 
-const CurrentWeather = () => {
+const CurrentWeather = ({ weatherData }) => {
   const {
     wrapper,
     container,
@@ -15,24 +16,40 @@ const CurrentWeather = () => {
     info,
     message,
   } = styles;
+
+  const {
+    main: { temp, feels_like, temp_max, temp_min },
+    weather,
+  } = weatherData;
+
+  const weatherCondition = weather[0]?.main;
   return (
-    <SafeAreaView style={wrapper}>
+    <SafeAreaView
+      style={[
+        wrapper,
+        { backgroundColor: weatherType[weatherCondition]?.backgroundColor },
+      ]}
+    >
       <View style={container}>
-        <Feather name="sun" size={100} color="black" />
-        <Text style={Temperature}>6</Text>
-        <Text style={Feel}>Feels like 5</Text>
+        <Feather
+          name={weatherType[weatherCondition]?.icon}
+          size={100}
+          color="white"
+        />
+        <Text style={Temperature}>{`${temp}°`}</Text>
+        <Text style={Feel}>{`Feels like ${feels_like}°`}</Text>
 
         <RowText
-          messageOne={"High: 8"}
-          messageTwo={"Low: 6"}
+          messageOne={`High: ${temp_max}°  `}
+          messageTwo={`Low: ${temp_min}°`}
           containerStyles={infoWrapper}
           messageOneStyles={highLow}
           messageTwoStyles={highLow}
         />
       </View>
       <RowText
-        messageOne={"It's sunny"}
-        messageTwo={"It's perfect t-shirt weather"}
+        messageOne={weather[0]?.description}
+        messageTwo={weatherType[weatherCondition]?.message}
         containerStyles={bodyWrapper}
         messageOneStyles={info}
         messageTwoStyles={message}
@@ -44,10 +61,10 @@ const CurrentWeather = () => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: "pink",
+  
   },
   container: {
-    marginTop: StatusBar.currentHeight || 0,
+    // marginTop: StatusBar.currentHeight || 0,
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
@@ -62,17 +79,12 @@ const styles = StyleSheet.create({
   infoWrapper: {
     flexDirection: "row",
 
-    
-  },
-  high: {
-    fontSize: 20,
    
   },
-  low: {
-    fontSize: 20,
-    
-   
-  },
+highLow: {
+  fontSize: 20,
+
+},
   bodyWrapper: {
     justifyContent: "flex-end",
     alignItems: "flex-start",
@@ -80,7 +92,7 @@ const styles = StyleSheet.create({
     marginBottom: 50,
   },
   info: {
-    fontSize: 38,
+    fontSize: 43,
   },
   message: {
     fontSize: 25,

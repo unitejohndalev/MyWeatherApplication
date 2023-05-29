@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 import {
   SafeAreaView,
   Text,
@@ -10,7 +11,7 @@ import {
 
 import IconText from "../components/IconText";
 
-const City = () => {
+const City = ({weatherData}) => {
   const {
     container,
     cityName,
@@ -24,19 +25,21 @@ const City = () => {
     rowLayout
   } = styles;
 
+  const{name, country, population, sunrise, sunset} = weatherData
+
   return (
     <SafeAreaView style={container}>
       <ImageBackground
         source={require("../../assets/city-background.jpg")}
         style={imageLayout}
       >
-        <Text style={[cityName, cityText]}>London</Text>
-        <Text style={[countryName, cityText]}>UK</Text>
+        <Text style={[cityName, cityText]}>{name}</Text>
+        <Text style={[countryName, cityText]}>{country}</Text>
         <View style={[populationWrapper, rowLayout]}>
           <IconText
             iconName={"user"}
             iconColor={"red"}
-            bodyText={"8000"}
+            bodyText={`Population: ${population}`}
             bodyTextStyles={populationText}
           />
         </View>
@@ -44,14 +47,14 @@ const City = () => {
           <IconText
             iconName={"sunrise"}
             iconColor={"white"}
-            bodyText={"10:46:58am"}
+            bodyText={moment(sunrise).format('h:mm:ss a')}
             bodyTextStyles={riseSetText}
           />
 
           <IconText
             iconName={"sunset"}
             iconColor={"white"}
-            bodyText={"17:28:15pm"}
+            bodyText={moment(sunset).format('h:mm:ss a')}
             bodyTextStyles={riseSetText}
           />
         </View>
@@ -63,25 +66,25 @@ const City = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    // marginTop: StatusBar.currentHeight || 0,
   },
   imageLayout: {
     flex: 1,
   },
   cityName: {
     fontSize: 40,
+    color: "white",
   },
   countryName: {
     fontSize: 30,
+    color: "black",
   },
   cityText: {
     justifyContent: "center",
     alignSelf: "center",
     fontWeight: "bold",
-    color: "white",
   },
   populationWrapper: {
-
     justifyContent: "center",
     marginTop: 30,
   },
@@ -91,7 +94,6 @@ const styles = StyleSheet.create({
     color: "red",
   },
   riseSetWrapper: {
-  
     justifyContent: "space-around",
     marginTop: 30,
   },
