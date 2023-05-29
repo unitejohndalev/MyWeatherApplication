@@ -11,6 +11,7 @@ const Tab = createBottomTabNavigator();
 const App = () => {
   const [loading, error, weather] = useGetWeather();
   // this is for loading json data
+  // nothing is lost
 
   if (weather && weather.list && !loading) {
     return (
